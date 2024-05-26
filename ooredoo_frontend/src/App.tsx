@@ -1,21 +1,15 @@
 import { useState } from 'react';
 import './App.css';
-import Table from './components/Table';
+import Table from './components/table/Table';
+import useChannelStore from './store/channelStore';
+import Sidebar from './components/sidebar/Sidebar';
+import Footer from './components/footer/Footer';
 function App() {
-  const [channels, setChannels] = useState([]);
+  const { channels, fetchChannels } = useChannelStore();
   const [editingChannel, setEditingChannel] = useState(null);
   const [newChannelName, setNewChannelName] = useState('');
   const [newChannelNumber, setNewChannelNumber] = useState('');
   console.log(channels)
-  const fetchChannels = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/api/channels');
-      const data = await response.json();
-      setChannels(data);
-    } catch (error) {
-      console.error('Error fetching channels:', error);
-    }
-  };
 
   const editChannel = (channel) => {
     setEditingChannel(channel.id);
@@ -48,8 +42,8 @@ function App() {
 
   return (
     <>
-      {/* <h1>Retrieve Ooredoo Channels</h1>
-      <div className="card">
+      <h1>Retrieve Ooredoo Channels</h1>
+      {/* <div className="card">
         <button onClick={fetchChannels}>
           Fetch Channels
         </button>
@@ -100,11 +94,10 @@ function App() {
             </li>
           ))}
         </ul>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
-      <Table />
+      </div> */}
+      <Sidebar />
+      {channels.length < 1 ? <button onClick={fetchChannels}>Fetch Channels</button> : <Table channels={channels}/>}
+      <Footer />
     </>
   );
 }
