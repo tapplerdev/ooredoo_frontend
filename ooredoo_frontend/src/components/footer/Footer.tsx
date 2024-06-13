@@ -1,4 +1,4 @@
-const Footer = () => <footer>Click on the Vite and React logos to learn more</footer>
+const Footer = () => <footer></footer>
 
 
 export default Footer;
