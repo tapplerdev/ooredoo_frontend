@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useUIStore from '@/store/UIStore';
+import useUIStore from '@/store/UI/UIStore';
 import { useGetChannels } from '@/lib/react-query/queries';
 
 const ClearChannelSearch = () => {

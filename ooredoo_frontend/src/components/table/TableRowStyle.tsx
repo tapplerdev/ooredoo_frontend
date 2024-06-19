@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import editicon from '../../assets/editicon.svg';
 import { IChannel } from '@/types/index';
-import useUIStore from '@/store/UIStore';
+import useUIStore from '@/store/UI/UIStore';
 
 
 const TableRowStyle: React.FC<IChannel> = ({ id, channel_number, product_id, package_name, channel_name }) => {

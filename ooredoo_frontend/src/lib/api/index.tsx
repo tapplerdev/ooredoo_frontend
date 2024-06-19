@@ -1,5 +1,41 @@
 import { IChannel, OrderBy } from "@/types/index"
 
+
+// ============================== AUTH/USERS
+export async function useSignInAccount(user: { email: string, password: string }) {
+  const adminUser = {...user, userType: "admin"}
+  try {
+    const response = await fetch('http://localhost:3000/api/auth', {
+      method: 'POST', // Specify the HTTP method as POST
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type as JSON
+      },
+      body: JSON.stringify(adminUser), // Convert the user object to a JSON string
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    // Parse the JSON response
+    const data = await response.json();
+    console.log('here is the data: ', data)
+    return data; // Return the parsed data
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+    throw error; // Rethrow the error for handling outside this function
+  }
+}
+
+// export async function getCurrentUser(params: any) {
+//   try {
+//     const currentUser = await 
+//   }
+// }
+
+
+
 // ============================== GET ALL CHANNELS
 export async function getChannels(order?: OrderBy, searchTerm?: string) {
   const url = new URL('http://localhost:3000/api/channels/')

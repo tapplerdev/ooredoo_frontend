@@ -113,7 +113,7 @@ import { IChannelQueryOptions, OrderBy } from '@/types/index.ts'
 
 interface UIState {
   order: OrderBy | undefined;
-  setOrder: (order: OrderBy) => void;
+  setOrder: (order: OrderBy | undefined) => void;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   clearSearchTerm: () => void;

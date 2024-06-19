@@ -14,5 +14,10 @@ export type IChannelQueryOptions = {
 };
 
 
+export type IUser = {
+    user_id: string;
+    name: string;
+    email: string;
+};
 
 

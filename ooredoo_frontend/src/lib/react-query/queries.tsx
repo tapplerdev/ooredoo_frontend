@@ -1,5 +1,4 @@
-import { OrderBy } from "@/types/index";
-import { getChannels, searchChannels, editChannel } from "../api";
+import { getChannels, searchChannels, editChannel, useSignInAccount } from "../api";
 import { QUERY_KEYS } from "./queryKeys";
 import {
     useQuery,
@@ -8,10 +7,25 @@ import {
     useInfiniteQuery,
   } from "@tanstack/react-query";
 import { IChannelQueryOptions } from "@/types/index";
+import { AuthUser } from "@/store/auth/types";
+
+// ============================================================
+// USER QUERIES
+// ============================================================
+
+export const useUserSignIn = () => {
+  return useMutation({
+    mutationFn: (params: AuthUser) => useSignInAccount(params)
+  });
+};
+
 
 // ============================================================
 // CHANNEL QUERIES
 // ============================================================
+
+
+
 
 export const useGetChannels = (params: IChannelQueryOptions) => {
   const { order, searchTerm } = params;
@@ -21,7 +35,6 @@ export const useGetChannels = (params: IChannelQueryOptions) => {
       queryKey: [QUERY_KEYS.GET_CHANNELS, order, searchTerm],
       queryFn: () => getChannels(order, searchTerm),
       enabled: false,
-      staleTime: 50000,
     });
 };
 

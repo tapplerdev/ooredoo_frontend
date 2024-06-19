@@ -1,15 +1,13 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import TableRowStyle from './TableRowStyle';
-import useUIStore from '@/store/UIStore';
+import useUIStore from '@/store/UI/UIStore';
 import { useGetChannels, useSearchChannels } from '@/lib/react-query/queries';
-
+import { Loader } from '../loader/Loader';
 const Table: React.FC = () => {
   const { order, setOrder, searchTerm } = useUIStore();
-
   console.log('here is the order ', order)
   console.log('here is the searchTerm ', searchTerm)
-  const { data: channels, isLoading, refetch } = useGetChannels({order, searchTerm});
-  const [fetched, setFetched] = useState(false);
+  const { data: channels, isLoading, refetch } = useGetChannels({ order, searchTerm });
   
   const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setOrder(event.target.value as 'ASC' | 'DESC');
@@ -28,24 +26,26 @@ const Table: React.FC = () => {
     }
   }, [searchTerm]);
 
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />
   }
+
   console.log('Current search term from table:', searchTerm); // Check if this updates
-  const ErrorMessage = () => {
-    return (
-      <div>
-        <button onClick={() => refetch()}>Fetch Channels</button>
-      </div>
-    )
-  }
+  const fetchChannels = () => {
+    refetch();
+  };
+
+  const FetchChannelsButton = () => (
+    <button onClick={fetchChannels}>Fetch Channels</button>
+  );
 
   console.log('this is the data from all channels ', channels)
 
   if (!channels){
-    return <ErrorMessage />
+    return <FetchChannelsButton />
   }
-
+  
   return (
     <div className="p-5 h-full">
       <div className="overflow-auto rounded-lg shadow hidden md:block">
