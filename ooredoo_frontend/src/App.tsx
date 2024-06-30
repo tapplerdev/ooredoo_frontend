@@ -6,10 +6,14 @@ import RootLayout from './_root/RootLayout';
 import { ListChannels } from './_root/pages/ListChannels';
 import useInvalidateCacheOnAuthChange from './hooks/useInvalidateCacheOnAuthChange';
 import { useAuthStore } from './store/auth/AuthStore';
+import { Settings } from './_root/pages/Settings';
+import { Audit } from './_root/pages/Audit';
 function App() {
-  useInvalidateCacheOnAuthChange();
-  const {user,isAuthenticated,accessToken} = useAuthStore();
-  console.log(`Here is the entire session in one go now: ${JSON.stringify(user)}, authentication status: ${isAuthenticated}, accessToken: ${accessToken}`)
+  // useInvalidateCacheOnAuthChange();
+  // const { user,isAuthenticated,accessToken, checkTokenExpiry } = useAuthStore();
+  // checkTokenExpiry();
+  // // console.log(`Here is the entire session in one go now: ${JSON.stringify(user)}, authentication status: ${isAuthenticated}, accessToken: ${accessToken}`)
+  // useInvalidateCacheOnAuthChange()
   return (
     <>
     <Routes>
@@ -21,6 +25,8 @@ function App() {
         {/* private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<ListChannels />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/audit" element={<Audit />} />
         </Route>
     </Routes>
     </>

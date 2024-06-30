@@ -6,16 +6,23 @@ import {
     useQueryClient,
     useInfiniteQuery,
   } from "@tanstack/react-query";
-import { IChannelQueryOptions } from "@/types/index";
-import { AuthUser } from "@/store/auth/types";
+import { DefaultChannelQueryOptions, IChannelQueryOptions } from "@/types/index";
+import { AuthRequest, AuthResponse } from "@/store/auth/types";
+
 
 // ============================================================
 // USER QUERIES
 // ============================================================
 
 export const useUserSignIn = () => {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (params: AuthUser) => useSignInAccount(params)
+    mutationFn: (params: AuthRequest) => useSignInAccount(params),
+    onSuccess: (data: AuthResponse) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CHANNELS]
+      })
+    }
   });
 };
 
@@ -27,14 +34,13 @@ export const useUserSignIn = () => {
 
 
 
-export const useGetChannels = (params: IChannelQueryOptions) => {
-  const { order, searchTerm } = params;
-  console.log('here is the order ', order)
-  console.log( 'here is the searchTerm ', searchTerm)
+export const useGetChannels = (params: IChannelQueryOptions = DefaultChannelQueryOptions) => {
+
+  // console.log('here is the order ', order)
+  // console.log( 'here is the searchTerm ', searchTerm)
     return useQuery({
-      queryKey: [QUERY_KEYS.GET_CHANNELS, order, searchTerm],
-      queryFn: () => getChannels(order, searchTerm),
-      enabled: false,
+      queryKey: [QUERY_KEYS.GET_CHANNELS],
+      queryFn: () => getChannels(params),
     });
 };
 
@@ -52,6 +58,7 @@ export const useEditChannel = () => {
     return useMutation({
       mutationFn: editChannel,
       onSuccess: () => {
+        console.log('it was successful to edit the channel!')
         queryClient.invalidateQueries({
             queryKey: [QUERY_KEYS.GET_CHANNELS]
         });

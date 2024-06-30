@@ -109,25 +109,25 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { IChannelQueryOptions, OrderBy } from '@/types/index.ts'
+import { ObjectEnum } from '@/utils/types';
+import { filterOptions } from '@/components/searchbar/types';
 
 
 interface UIState {
-  order: OrderBy | undefined;
+  order: OrderBy;
   setOrder: (order: OrderBy | undefined) => void;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
   clearSearchTerm: () => void;
-  setEditChannel: () => void;
+  filter: ObjectEnum<typeof filterOptions> | undefined;
+  setFilter: (filterOption: ObjectEnum<typeof filterOptions> | undefined) => void; 
 }
 
 const useUIStore = create<UIState>()(
     (set) => ({
-      order: undefined,
-      searchTerm: '',
+      order: 'ASC',
       setOrder: (order) => set({ order: order }),
-      setSearchTerm: (term: string) => set({ searchTerm: term }),
       clearSearchTerm: () => set({ searchTerm: '' }),
-      setEditChannel: () => set({})
+      filter: undefined,
+      setFilter: (filter) => set({ filter: filter })
     }),
 );
 

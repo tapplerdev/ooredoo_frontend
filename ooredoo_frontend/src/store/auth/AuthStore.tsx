@@ -18,17 +18,24 @@ export const useAuthStore = create<AuthState>()(
       setRefreshToken: (refreshToken) => set({ refreshToken }),
       checkTokenExpiry: () => {
         const { accessToken } = get();
+        console.log('here is the accessToken ', accessToken)
+        if (!accessToken) {
+            return;
+        }
         if (accessToken) {
           try {
+            
             const decodedToken = jwtDecode<{ exp: number }>(accessToken);
             const currentTime = Date.now() / 1000;
             if (decodedToken.exp < currentTime) {
               // Token is expired
+              console.log('Token expired!')
               set({ accessToken: null, refreshToken: null, isAuthenticated: false, user: DEFAULT_USER });
               localStorage.removeItem('auth-storage'); // Clear persisted storage
             }
           } catch (error) {
             // In case of an invalid token
+            console.log('Token invalid!')
             set({ accessToken: null, refreshToken: null, isAuthenticated: false, user: DEFAULT_USER });
             localStorage.removeItem('auth-storage'); // Clear persisted storage
           }

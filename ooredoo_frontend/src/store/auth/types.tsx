@@ -27,3 +27,17 @@ export const DEFAULT_USER: IUser = {
     name: '',
     email: ''
 };
+
+
+export type AuthRequest = {
+    email: string
+    password: string
+    userType: "admin" | "user"
+  }
+  
+export type AuthResponse = {
+    token: string
+    refreshToken: string
+    id: number
+    userType: "admin" | "user"
+  }

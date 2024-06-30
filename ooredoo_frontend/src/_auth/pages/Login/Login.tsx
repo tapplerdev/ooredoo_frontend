@@ -9,7 +9,8 @@ import { useAuthStore } from "@/store/auth/AuthStore";
 import { jwtDecode } from "jwt-decode";
 import { IUser } from "@/types";
 import ooredooimg from "@/assets/ooredoo.png";
-import { Loader } from "@/components/loader/Loader";
+import { LoaderComponent } from "@/components/loader/LoaderComponent";
+import { AuthRequest } from "@/store/auth/types";
 export const Login = () => {
 const navigate = useNavigate();
 const { 
@@ -27,7 +28,7 @@ const {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting }
-    } = useForm<z.infer<typeof SigninValidation>>({
+    } = useForm<z.infer<typeof SigninValidation & AuthRequest>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
       email: "",
@@ -45,12 +46,12 @@ const {
     }
   } 
 
-const handleLogin = async (user: z.infer<typeof SigninValidation>) => {
-    setIsAuthLoading(true);
-    const session = await useSignInAccount(user);
+const handleLogin = async (user: z.infer<typeof SigninValidation & AuthRequest>) => {
+    // setIsAuthLoading(true);
+    const session = await useSignInAccount({...user, userType: "admin"});
     setIsAuthLoading(false);
     if (!session) {
-        console.log('User not authenticated please try again.')
+        return;
     }
     const { token } = session;
     const authenticatedUser = handleDecodedToken(token);
@@ -61,17 +62,12 @@ const handleLogin = async (user: z.infer<typeof SigninValidation>) => {
        navigate("/")
     }
 }
-// const onSubmit = async (data) => {
-//     console.log('Form data: ', data)
-//     await useSignInAccount(data);
-// }
 
-// if (isUserLoading) {
-//     return <h1>Loading user data.... teehee</h1>
+console.log('here is isauthloading: ', isAuthLoading)
+
+// if (isAuthLoading) {
+//     return <LoaderComponent />
 // }
-if (isAuthLoading) {
-    return <Loader />
-}
 return (
     <div className="min-h-screen flex  justify-center bg-gray-100">
         <div className="w-96 max-w-md p-1">
@@ -103,7 +99,7 @@ return (
             <div className="flex items-center justify-center">
             <button
                 type="submit"
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out cursor-pointer border border-gray-300 w-full"
+                className="bg-ooredoo-primary hover:bg-red-700 text-white font-bold py-2 px-3 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out cursor-pointer border border-gray-300 w-full"
             >
                 Sign In
             </button>

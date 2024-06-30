@@ -7,18 +7,17 @@ import { useAuthStore } from '@/store/auth/AuthStore';
 const useInvalidateCacheOnAuthChange = () => {
   const { isAuthenticated } = useAuthStore();
   const queryClient = useQueryClient();
-  const { setOrder, setSearchTerm } = useUIStore();
+  const { setOrder } = useUIStore();
   useEffect(() => {
-      console.log('invalidating queries from useinvalidatecachonauthchange')
-      console.log('Here is the current cache: ', queryClient.getQueryData([QUERY_KEYS.GET_CHANNELS]))
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CHANNELS],
-      });
-      queryClient.removeQueries({queryKey: [QUERY_KEYS.GET_CHANNELS], exact: true});
-      queryClient.clear();
-      setOrder(undefined);
-      setSearchTerm('');
-    
+    //   console.log('invalidating queries from useinvalidatecachonauthchange')
+    //   console.log('Here is the current cache: ', queryClient.getQueryData([QUERY_KEYS.GET_CHANNELS]))
+    //   queryClient.invalidateQueries({
+    //     queryKey: [QUERY_KEYS.GET_CHANNELS],
+    //   });
+    //   queryClient.removeQueries({queryKey: [QUERY_KEYS.GET_CHANNELS], exact: true});
+    //   queryClient.clear();
+      setOrder('ASC');
+    queryClient.removeQueries({queryKey: [QUERY_KEYS.GET_CHANNELS]})
   }, [isAuthenticated]);
   
 };
